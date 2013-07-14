@@ -5,6 +5,11 @@ $primitive_fun_env = {
     :+ => [:prim, lambda {|x, y| x + y}],
     :- => [:prim, lambda {|x, y| x - y}],
     :* => [:prim, lambda {|x, y| x * y}],
+    :> => [:prim, lambda {|x, y| x > y}],
+    :< => [:prim, lambda {|x, y| x < y}],
+    :>= => [:prim, lambda {|x, y| x >= y}],
+    :<= => [:prim, lambda {|x, y| x <= y}],
+    :== => [:prim, lambda {|x, y| x <= y}],
 }
 $global_env = [$primitive_fun_env]
 
@@ -132,10 +137,29 @@ end
 
 # lambda式 or let式
 def special_form? exp
-  lambda?(exp) or let?(exp)
+  lambda?(exp) or
+  let?(exp) or
+  if?(exp)
 end
 
 def eval_special_form exp, env
   return eval_lambda exp, env if lambda? exp
   return eval_let exp, env    if let? exp
+  return eval_if exp, env     if if? exp
+end
+
+# 第3章 再帰
+def eval_if exp, env
+  cond, true_clause, false_clause = if_to_cond_true_false exp
+  if _eval cond, env
+    _eval true_clause, env
+  else
+    _eval false_clause, env
+  end
+end
+def if_to_cond_true_false exp
+  [exp[1], exp[2], exp[3]]
+end
+def if? exp
+  exp[0] == :if
 end
