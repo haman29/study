@@ -40,6 +40,7 @@ def cdr list
   list[1..-1]
 end
 
+# 関数の中身を取得する
 def lookup_primitive_fun exp
   $primitive_fun_env[exp]
 end
@@ -49,6 +50,7 @@ def eval_list(exp)
   exp.map{ |e| _eval(e) }
 end
 
+# 関数適用する
 def apply fun, args
   fun_val = fun[1]
   fun_val.call(*args)
