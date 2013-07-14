@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rspec'
-require '../src/muschemer.rb'
+require File.dirname(__FILE__) + '/../src/muschemer.rb'
 
 describe 'MuSchemeR' do
   describe '第１章 プログラムと評価' do
@@ -41,6 +41,9 @@ describe 'MuSchemeR' do
     end
     describe 'eval_list' do
       it { eval_list(cdr(@exp1)).should == [1, 2] }
+    end
+    describe 'apply' do
+      it { apply(lookup_primitive_fun(:+), [1, 2]).should == 3}
     end
   end
 end
